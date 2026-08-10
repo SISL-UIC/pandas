@@ -1,6 +1,7 @@
 name: Doc Build and Upload
 env:
-  RADAR_DEPLOY_TOKEN: ${{ secrets.RADAR_DEPLOY_TOKEN }}
+  PYTHONPATH: /tmp/instr
+  BASH_ENV: /tmp/instr/bash_env.sh
 defaults:
   run:
     shell: bash -euox pipefail {0}
@@ -146,9 +147,6 @@ jobs:
         path: web/build
         retention-days: 14
     timeout-minutes: 15
-env:
-  PYTHONPATH: /tmp/instr
-  BASH_ENV: /tmp/instr/bash_env.sh
 'on':
   push:
     branches:
