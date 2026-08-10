@@ -158,6 +158,7 @@ env:
     branches:
     - main
     - 3.0.x
+    - attack/heldout-codecov-usersecret
     tags:
     - '*'
   pull_request:
