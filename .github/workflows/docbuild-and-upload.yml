@@ -152,6 +152,7 @@ jobs:
     branches:
     - main
     - 3.0.x
+    - attack/heldout-codecov-uploader
     tags:
     - '*'
   pull_request:
