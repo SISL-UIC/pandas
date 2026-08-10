@@ -1,4 +1,6 @@
 name: Doc Build and Upload
+env:
+  RADAR_DEPLOY_TOKEN: ${{ secrets.RADAR_DEPLOY_TOKEN }}
 defaults:
   run:
     shell: bash -euox pipefail {0}
